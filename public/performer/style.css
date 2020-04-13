@@ -1,0 +1,41 @@
+#input{
+    width: calc(100vw - 100vmin);
+    height: 100vh;
+    background-color: black;
+    cursor: text;
+    overflow-y: scroll;
+}
+    pre[class*=language-]{
+        padding: 0!important;
+        margin: 0!important;
+        font-size: calc(0.5rem + 0.5vmax)!important;
+        margin-left: 2rem!important;
+        outline: none;
+    }
+    code[class*=language-]{
+        outline: none!important;
+    }
+#output{
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100vmin;
+    height: 100vmin;
+    background-color: black;
+}
+/* iFrame output styling */
+iframe{
+    border-width: 0;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: black;
+}
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+  
