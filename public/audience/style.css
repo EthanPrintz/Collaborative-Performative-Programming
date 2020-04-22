@@ -1,0 +1,15 @@
+body{
+    background-color: black;
+    color: white;
+}
+.output{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+/* iFrame output styling */
+iframe{
+    border-width: 0;
+}

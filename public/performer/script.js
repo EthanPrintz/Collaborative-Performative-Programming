@@ -1,3 +1,28 @@
+//---------------------------------------------
+// Define variables
+//---------------------------------------------
+// Tracks if code should be sent to server
+let socketEnabled = false;
+
+//---------------------------------------------
+// Init websockets
+//---------------------------------------------
+const socket = io('/performer');
+socket.on('connect', () => {
+    // Logs connectiont to server
+    console.log("🌐 Connected to socket server");
+    // Allow code to be sent to server
+    socketEnabled = true;
+    // Send default code to server
+    let codeBase = renderOutput();
+    // Send code to server if allowed
+    console.log("📦 Sending Default Code!");
+    socket.emit('codeChange', codeBase);
+});
+
+//---------------------------------------------
+// Main logic
+//---------------------------------------------
 $(document).ready(() => {
     // Get starting codebase and render to output iframe
     renderOutput();
@@ -14,10 +39,19 @@ $(document).ready(() => {
         // Reset cursor position to previous value
         setCurrentCursorPosition(codeBlock, cursorPos + 12);
         // Call function to render input to output
-        renderOutput();
+        // Returns code or null if error in code
+        let codeBase = renderOutput();
+        // Send code to server if allowed
+        if(socketEnabled && codeBase){
+            console.log("📦 Sending Code!");
+            socket.emit('codeChange', codeBase);
+        }
     });
 });
 
+//---------------------------------------------
+// Define functions
+//---------------------------------------------
 // Render current input text to output iframe
 function renderOutput(){
     // Save codeblock element
@@ -30,11 +64,15 @@ function renderOutput(){
     <style>body{margin: 0; overflow: hidden;}</style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
     <script>${codeBase}<\/script>`;
+    // Try evaluating code to catch errors
+    try{ eval(codeBase) }catch(error){ return null }
+    // Return output code
+    return codeBase;
 }
 
-// Get current character position within `con`tenteditable
+// Get current character position within contenteditable
 // From Stackoverflow user Tim Down
-https://stackoverflow.com/questions/4811822/
+// https://stackoverflow.com/questions/4811822/
 function getCaretCharacterOffsetWithin(element) {
     var caretOffset = 0;
     var doc = element.ownerDocument || element.document;
