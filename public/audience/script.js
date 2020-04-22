@@ -41,6 +41,7 @@ socket.on('codeChange', ({id, codeBase}) => {
         sandbox="allow-same-origin allow-scripts"
         srcdoc="<style>body{margin: 0; overflow: hidden;}</style>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js'></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/addons/p5.sound.min.js'></script>
         <script>${codeBase}</script>">
         </iframe>`);
     // If it does exist
@@ -49,6 +50,7 @@ socket.on('codeChange', ({id, codeBase}) => {
         document.getElementById(id.split("#")[1]).srcdoc = `
         <style>body{margin: 0; overflow: hidden;}</style>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/addons/p5.sound.min.js"></script>
         <script>${codeBase}</script>`;
     }
 });

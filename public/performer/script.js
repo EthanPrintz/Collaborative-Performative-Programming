@@ -27,6 +27,7 @@ $(document).ready(() => {
     // Get starting codebase and render to output iframe
     renderOutput();
 
+    // Overide default behavior for enter key to shift enter
     $('[contenteditable]').on('keydown', function(event) {
         if (event.keyCode == 13 && !event.shiftKey) {
             event.preventDefault();
@@ -72,6 +73,7 @@ function renderOutput(){
     document.getElementById("output").srcdoc = `
     <style>body{margin: 0; overflow: hidden;}</style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/addons/p5.sound.min.js"></script>
     <script>${codeBase}<\/script>`;
     // Try evaluating code to catch errors
     try{ eval(codeBase) }catch(error){ return null }

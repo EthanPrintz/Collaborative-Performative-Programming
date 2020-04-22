@@ -6,6 +6,7 @@
     <title>Performer</title>
     <!-- P5 Load -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/addons/p5.sound.min.js"></script>
     <!-- SocketIO Load -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.slim.js"></script>
     <!-- JQuery Load -->
@@ -26,28 +27,50 @@
         </div>
         <pre id="codeContainer" contenteditable="true">
             <code id="codeBlock" class="language-js">
+var ellipseWidth = 1;
+var ellipseRadius = 1;
+
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  noStroke();
+    // Create P5 Canvas
+    createCanvas(windowWidth, windowHeight);
 
-  fill(204);
-  triangle(18, 18, 18, 360, 81, 360);
+    // Create an Audio input
+    mic = new p5.AudioIn();
 
-  fill(102);
-  rect(81, 81, 63, 63);
+    // start the Audio Input.
+    // By default, it does not .connect() (to the computer speakers)
+    mic.start();
 
-  fill(204);
-  quad(189, 18, 216, 18, 216, 360, 144, 360);
+}
 
-  fill(255);
-  ellipse(252, 144, 72, 72);
+function draw() {
+  
+  var vol = (mic.getLevel()*1000)+1;
+  console.log(vol);
+  
+  background(30);
+  
+	for(var i=0;i<100;i++){
+    
+    //Draw Outer Ellipses
+      fill(30);
+      stroke(240);
+    	ellipseRadius = (ellipseWidth%i)*4*vol;
+      ellipse((windowWidth / 2), (windowHeight / 2), ellipseRadius, ellipseRadius);
+    
+  	//Draw Inner Ellipses
+      stroke(255,0,0);
+    	ellipseRadius = (ellipseWidth%i)*3*vol;
+  		ellipse((windowWidth / 2), (windowHeight / 2), ellipseRadius, ellipseRadius);
+    
+  }
 
-  fill(204);
-  triangle(288, 18, 351, 360, 288, 360);
-
-  fill(255);
-  arc(479, 300, 280, 280, PI, TWO_PI);
-
+  ellipseWidth++;
+  
+  if(ellipseWidth>920){
+    ellipseWidth=1;
+  }
+  
 }
 
             </code>

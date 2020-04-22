@@ -3,11 +3,9 @@ body{
     color: white;
 }
 .output{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    float: left;
+    width: 50vw;
+    height: 50vh;
 }
 /* iFrame output styling */
 iframe{
