@@ -29,11 +29,28 @@ socket.on('performerConnected', id => {
 socket.on('codeChange', ({id, codeBase}) => {
     // Log code change
     console.log(`📦 ${id} has changed their code`)
-    // Change Iframe SRC Doc property
-    document.getElementById(id.split("#")[1]).srcdoc = `
-    <style>body{margin: 0; overflow: hidden;}</style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
-    <script>${codeBase}</script>`;
+    // Check if ID exists in array
+    // If it does not exist
+    if(!performers.some(performer => performer.id == id)){
+        performers.push({id: id, codeBase: ''})
+        // Log table of current performers
+        console.table(performers);
+        // Add iframe for performer
+        $("#performers").append(`
+        <iframe class="output" id="${id.split("#")[1]}" 
+        sandbox="allow-same-origin allow-scripts"
+        srcdoc="<style>body{margin: 0; overflow: hidden;}</style>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js'></script>
+        <script>${codeBase}</script>">
+        </iframe>`);
+    // If it does exist
+    } else {
+        // Change iFrame srcdoc property
+        document.getElementById(id.split("#")[1]).srcdoc = `
+        <style>body{margin: 0; overflow: hidden;}</style>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
+        <script>${codeBase}</script>`;
+    }
 });
 
 // Upon removing existing performer
