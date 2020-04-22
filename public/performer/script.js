@@ -27,6 +27,15 @@ $(document).ready(() => {
     // Get starting codebase and render to output iframe
     renderOutput();
 
+    $('[contenteditable]').on('keydown', function(event) {
+        if (event.keyCode == 13 && !event.shiftKey) {
+            event.preventDefault();
+            document.execCommand("insertLineBreak");    
+        } else if (event.keyCode == 13 && event.shiftKey) {
+          console.log('shift + enter');
+        }
+    });
+
     // Text editing and script re-rendering
     $('[contenteditable]').on('focus', () => {
     }).on('blur keyup paste', () => {
