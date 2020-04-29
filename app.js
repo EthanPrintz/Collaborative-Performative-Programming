@@ -50,8 +50,11 @@ const audience = io.of('/audience');
   audience.on('connection', socket => {
     // Log connection at socket id
     console.log(`🎟 Audience member CONNECTED at ${socket.id}`);
-    // Send current list of connected performers
-
+    // Request song state
+    conductors.emit('songStateRequest', socket.id);
+    socket.on('songStateRequest', id => {
+      conductors.emit('songStateRequest', socket.id);
+    });
     // Log disconnection at socket id
     console.log(`⚠️ Audience member DISCONNECTED at ${socket.id}`);
   });
@@ -65,12 +68,16 @@ const performers = io.of('/performer');
     console.log(`🎻 Performer CONNECTED at ${socket.id}`);
     // Send socket info to audience
     audience.emit('performerConnected', socket.id);
+    // Request song state
+    conductors.emit('songStateRequest', socket.id);
     // Received when a performer changes their code
     socket.on('codeChange', codeBase => {
       console.log(`📦 ${socket.id} has changed their code`)
       audience.emit('codeChange', {id: socket.id, codeBase: codeBase})
     });
-
+    socket.on('songStateRequest', id => {
+      conductors.emit('songStateRequest', socket.id);
+    });
     // On disconnection
     socket.on("disconnect", () => {
       // Send socket info to audience
@@ -87,7 +94,23 @@ const conductors = io.of('/conductor');
   conductors.on('connection', socket => {
     // Log connection at socket id
     console.log(`👨🏻‍💻 Conductor CONNECTED at ${socket.id}`);
-
+    // On song played
+    socket.on("songPlayed", data => {
+      performers.emit("songPlayed", data);
+      audience.emit("songPlayed", data);
+    });
+    // Song state reply
+    socket.on('songStateReply', data => {
+      console.log("Received song state reply for id ", data["id"]);
+      audience.emit('songState', data);
+      performers.emit('songState', data);
+    });
+    // On song paused
+    socket.on("songPaused", data => {
+      performers.emit("songPaused", data);
+      audience.emit("songPaused", data);
+      
+    });
     // On disconnection
     socket.on("disconnect", socket => {
       // Log disconnection at socket id

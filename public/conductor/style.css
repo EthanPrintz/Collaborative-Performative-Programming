@@ -1,0 +1,14 @@
+body{
+    background-color: black;
+    color: white;
+}
+
+.audioTitle{
+    font-family: sans-serif;
+    padding: 3vmin;
+    font-weight: bold;
+}
+audio{
+    display: block;
+    margin: 0 3vmin;
+}

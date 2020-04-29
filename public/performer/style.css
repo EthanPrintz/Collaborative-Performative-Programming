@@ -1,5 +1,6 @@
 #input{
     width: calc(100vw - 100vmin);
+    min-width: 40vw;
     height: 100vh;
     background-color: black;
     cursor: text;
@@ -22,6 +23,7 @@
     width: 100vmin;
     height: 100vmin;
     background-color: black;
+    max-width: 60vw;
 }
 /* iFrame output styling */
 iframe{

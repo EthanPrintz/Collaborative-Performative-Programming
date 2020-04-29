@@ -3,12 +3,14 @@
 //---------------------------------------------
 // Tracks if code should be sent to server
 let socketEnabled = false;
+let socketID;
 
 //---------------------------------------------
 // Init websockets
 //---------------------------------------------
 const socket = io('/performer');
 socket.on('connect', () => {
+    socketID = socket.id;
     // Logs connectiont to server
     console.log("🌐 Connected to socket server");
     // Allow code to be sent to server
@@ -16,8 +18,29 @@ socket.on('connect', () => {
     // Send default code to server
     let codeBase = renderOutput();
     // Send code to server if allowed
-    console.log("📦 Sending Default Code!");
+    console.log("📦 Sending Default Code!", codeBase);
     socket.emit('codeChange', codeBase);
+});
+
+
+// Upon receiving song played event from conductor
+socket.on('songPlayed', song => {
+    console.log(`Song ${song.name} PLAYED at time ${song.time}`);
+    renderOutput(song.name, song.time, true);
+});
+
+// Upon receiving song played event from conductor
+socket.on('songPaused', song => {
+    console.log(`Song ${song.name} PAUSED at time ${song.time}`);
+    renderOutput(song.name, song.time, false);
+});
+
+socket.on('songState', data => {
+    if(socketID == data.id){
+        console.log("🎸 Received song state!");
+        console.log(`${data.name}, ${data.time}, ${data.isPlaying}`);
+        renderOutput(data.name, data.time, data.isPlaying);
+    }
 });
 
 //---------------------------------------------
@@ -50,10 +73,11 @@ $(document).ready(() => {
         setCurrentCursorPosition(codeBlock, cursorPos + 12);
         // Call function to render input to output
         // Returns code or null if error in code
+        socket.emit('songStateRequest', socket.id);
         let codeBase = renderOutput();
         // Send code to server if allowed
         if(socketEnabled && codeBase){
-            console.log("📦 Sending Code!");
+            console.log("📦 Sending Code!", codeBase);
             socket.emit('codeChange', codeBase);
         }
     });
@@ -63,7 +87,7 @@ $(document).ready(() => {
 // Define functions
 //---------------------------------------------
 // Render current input text to output iframe
-function renderOutput(){
+function renderOutput(songName, songTime, songPlaying){
     // Save codeblock element
     let codeBlock = document.getElementById("codeBlock")
     // Get code of input without HTML element wrappers
@@ -74,9 +98,38 @@ function renderOutput(){
     <style>body{margin: 0; overflow: hidden;}</style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/addons/p5.sound.min.js"></script>
-    <script>${codeBase}<\/script>`;
+    <script>
+        let ellipseWidth = 1;
+        let ellipseRadius = 1;
+        let song;
+        let amp, mic;
+        let songPlaying = ${songPlaying};
+        
+        function preload(){
+            song = loadSound('../music/musicForProgramming-1.mp3')
+        }
+        
+        function setup() {
+            // Create P5 Canvas
+            createCanvas(windowWidth, windowHeight);
+        
+            // Create amp for music visualization
+            amp = new p5.Amplitude();
+            
+            if(${songPlaying}){
+                song.play();
+                song.jump(${songTime});
+            } else{
+                mic = new p5.AudioIn();
+                mic.start();
+            }
+        //============================================
+        // Do not change anything above this line
+        //============================================
+        ${codeBase}
+    </script>`;
     // Try evaluating code to catch errors
-    try{ eval(codeBase) }catch(error){ return null }
+    try{ eval(codeBase) }catch(error){ console.log("Code error") }
     // Return output code
     return codeBase;
 }

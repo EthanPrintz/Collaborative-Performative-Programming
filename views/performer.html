@@ -27,26 +27,23 @@
         </div>
         <pre id="codeContainer" contenteditable="true">
             <code id="codeBlock" class="language-js">
-var ellipseWidth = 1;
-var ellipseRadius = 1;
-
-function setup() {
-    // Create P5 Canvas
-    createCanvas(windowWidth, windowHeight);
-
-    // Create an Audio input
-    mic = new p5.AudioIn();
-
-    // start the Audio Input.
-    // By default, it does not .connect() (to the computer speakers)
-    mic.start();
+// PUT ADDITIONS TO SETUP HERE
 
 }
 
+// GETS VOLUME - MODIFY ONLY MULTIPLIER
+function getLevel(){
+    if(songPlaying){
+        return amp.getLevel()*10;
+    } else {
+        return mic.getLevel()*100;
+    }
+}
+
+// DRAW LOOP
 function draw() {
-  
-  var vol = (mic.getLevel()*1000)+1;
-  console.log(vol);
+
+  var vol = getLevel();
   
   background(30);
   
