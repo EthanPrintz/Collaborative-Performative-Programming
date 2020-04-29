@@ -21,6 +21,10 @@
 </head>
 <body>
     <div id="input">
+      <div id="examples">
+        <span class="example" id="example1">Radial Example</span>
+        <span class="example" id="example2">Second Example</span>
+      </div>
         <div id="instructionsContainer">
             <div id="instructionsHeader"></div>
             <div id="instructionsText"></div>
@@ -43,23 +47,23 @@ function getLevel(){
 // DRAW LOOP
 function draw() {
 
-  var vol = getLevel();
+  let vol = getLevel();
   
   background(30);
   
 	for(var i=0;i<100;i++){
     
     //Draw Outer Ellipses
-      fill(30);
-      stroke(240);
-    	ellipseRadius = (ellipseWidth%i)*4*vol;
-      ellipse((windowWidth / 2), (windowHeight / 2), ellipseRadius, ellipseRadius);
+    fill(30);
+    stroke(240);
+    ellipseRadius = (ellipseWidth%i)*4*vol;
+    ellipse((windowWidth / 2), (windowHeight / 2), ellipseRadius, ellipseRadius);
     
   	//Draw Inner Ellipses
-      stroke(255,0,0);
-    	ellipseRadius = (ellipseWidth%i)*3*vol;
-  		ellipse((windowWidth / 2), (windowHeight / 2), ellipseRadius, ellipseRadius);
-    
+    stroke(255,0,0);
+    ellipseRadius = (ellipseWidth%i)*3*vol;
+    ellipse((windowWidth / 2), (windowHeight / 2), ellipseRadius, ellipseRadius);
+  
   }
 
   ellipseWidth++;

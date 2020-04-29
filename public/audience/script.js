@@ -74,6 +74,8 @@ socket.on('songPlayed', song => {
     performers.forEach(performer => {
         document.getElementById(performer['id'].split("#")[1]).srcdoc = returnOutput(song.name, true, song.time, performer.codeBase);
     });
+    $("#preshow").hide();
+    $("#musicStopped").hide();
 });
 
 // Upon receiving song played event from conductor
@@ -82,6 +84,7 @@ socket.on('songPaused', song => {
     performers.forEach(performer => {
         document.getElementById(performer['id'].split("#")[1]).srcdoc = returnOutput(song.name, false, song.time, performer.codeBase);
     });
+    $("#musicStopped").show();
 });
 
 socket.on('songState', data => {
@@ -92,7 +95,12 @@ socket.on('songState', data => {
             document.getElementById(performer['id'].split("#")[1]).srcdoc = returnOutput(data.name, 
                 data.isPlaying, data.time, performer.codeBase);
         });
-        console.log("SRC UPDATED!", )
+        if(data.isPlaying){
+            $("#preshow").hide();
+            $("#musicStopped").hide();
+        } else{
+            $("#musicStopped").show();
+        }
     }
 });
 
@@ -105,6 +113,7 @@ function returnOutput(songName, songPlaying, songTime, codeBase){
         let ellipseRadius = 1;
         let song;
         let amp;
+        let songPlaying = ${songPlaying};
         
         function preload(){
             song = loadSound('../music/musicForProgramming-1.mp3')
@@ -117,9 +126,12 @@ function returnOutput(songName, songPlaying, songTime, codeBase){
             // Create amp for music visualization
             amp = new p5.Amplitude();
             
-            if(${songPlaying}){
+            if(${songPlaying ?? false}){
                 song.play();
-                song.jump(${songTime});
+                song.jump(${songTime ?? 0});
+            } else{
+                mic = new p5.AudioIn();
+                mic.start();
             }
         //============================================
         // Do not change anything above this line

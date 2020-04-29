@@ -11,3 +11,22 @@ body{
 iframe{
     border-width: 0;
 }
+
+#musicStopped, #preshow{
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    top: 0;
+    left: 0;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4vmax;
+    font-weight: bold;
+    font-family: sans-serif;
+}
+#preshow{
+    z-index: 2;
+}

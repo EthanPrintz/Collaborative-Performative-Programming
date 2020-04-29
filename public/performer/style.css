@@ -6,6 +6,22 @@
     cursor: text;
     overflow-y: scroll;
 }
+    #examples{
+        position: absolute;
+        width: calc(100vw - 100vmin);
+        height: 10vh;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-end;
+        padding: 1vmin 3vmin;
+    }
+        #examples span{
+            margin: 1vmin;
+            font-weight: bold;
+            color: white;
+            font-family: sans-serif;
+            cursor: pointer;
+        }
     pre[class*=language-]{
         padding: 0!important;
         margin: 0!important;

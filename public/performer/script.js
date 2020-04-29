@@ -81,6 +81,81 @@ $(document).ready(() => {
             socket.emit('codeChange', codeBase);
         }
     });
+
+// On clicking different examples
+$(".example").click(function(){
+    if($(this).attr("id") == "example1"){
+$("#codeBlock").html(`
+// PUT ADDITIONS TO SETUP HERE
+
+}
+
+// GETS VOLUME - MODIFY ONLY MULTIPLIER
+function getLevel(){
+    if(songPlaying){
+        return amp.getLevel()*10;
+    } else {
+        return mic.getLevel()*100;
+    }
+}
+
+// DRAW LOOP
+function draw() {
+
+    let vol = getLevel();
+    
+    background(30);
+    
+    for(var i=0;i<100;i++){
+    
+        //Draw Outer Ellipses
+        fill(30);
+        stroke(240);
+        ellipseRadius = (ellipseWidth%i)*4*vol;
+        ellipse((windowWidth / 2), (windowHeight / 2), ellipseRadius, ellipseRadius);
+
+        //Draw Inner Ellipses
+        stroke(255,0,0);
+        ellipseRadius = (ellipseWidth%i)*3*vol;
+        ellipse((windowWidth / 2), (windowHeight / 2), ellipseRadius, ellipseRadius);
+    
+    }
+
+    ellipseWidth++;
+    
+    if(ellipseWidth>920){
+    ellipseWidth=1;
+    }
+    
+}`);
+    } else if($(this).attr("id") == "example2"){
+        $("#codeBlock").html(`
+// PUT ADDITIONS TO SETUP HERE
+
+}
+
+// GETS VOLUME - MODIFY ONLY MULTIPLIER
+function getLevel(){
+    if(songPlaying){
+        return amp.getLevel()*10;
+    } else {
+        return mic.getLevel()*100;
+    }
+}
+
+// DRAW LOOP
+function draw() {
+
+    let vol = getLevel();
+
+    background(30);
+}
+        `);
+
+    }
+
+    Prism.highlightElement(codeBlock);
+});
 });
 
 //---------------------------------------------
@@ -123,9 +198,6 @@ function renderOutput(songName, songTime, songPlaying){
                 mic = new p5.AudioIn();
                 mic.start();
             }
-        //============================================
-        // Do not change anything above this line
-        //============================================
         ${codeBase}
     </script>`;
     // Try evaluating code to catch errors
