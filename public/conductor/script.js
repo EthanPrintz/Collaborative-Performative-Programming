@@ -13,8 +13,13 @@ song1.onpause = () => {
     socket.emit("songPaused", {name: "song1", time: song1.currentTime});
 };
 
-socket.on("songStateRequest", id => {
+socket.on("songStateRequest", data => {
     console.log("Received song state request");
-    socket.emit("songStateReply", {name: song1.currentSrc, 
-        time: song1.currentTime, isPlaying: songPlaying, id: id})
+    socket.emit("songStateReply", {
+        name: song1.currentSrc, 
+        time: song1.currentTime, 
+        isPlaying: songPlaying, 
+        performerId: data.performerId,
+        audienceId: (data.audienceId ?? '')
+    });
 });

@@ -52,8 +52,13 @@ const audience = io.of('/audience');
     console.log(`🎟 Audience member CONNECTED at ${socket.id}`);
     // Request song state
     conductors.emit('songStateRequest', socket.id);
-    socket.on('songStateRequest', id => {
-      conductors.emit('songStateRequest', socket.id);
+    // Request for current song state
+    socket.on('songStateRequest', data => {
+      conductors.emit('songStateRequest', data);
+    });
+    // Request for current performers
+    socket.on('performerStateRequest', () => {
+      audience.emit('performerStateResponse', performersList);
     });
     // Log disconnection at socket id
     console.log(`⚠️ Audience member DISCONNECTED at ${socket.id}`);
@@ -66,22 +71,30 @@ const performers = io.of('/performer');
   performers.on('connection', socket => {
     // Log connection at socket id
     console.log(`🎻 Performer CONNECTED at ${socket.id}`);
+    // Push to array
+    performersList.push({id: socket.id, codeBase: ''})
     // Send socket info to audience
     audience.emit('performerConnected', socket.id);
     // Request song state
     conductors.emit('songStateRequest', socket.id);
     // Received when a performer changes their code
     socket.on('codeChange', codeBase => {
-      console.log(`📦 ${socket.id} has changed their code`)
-      audience.emit('codeChange', {id: socket.id, codeBase: codeBase})
+      // Log change
+      console.log(`📦 ${socket.id} has changed their code`);
+      // Adjust array
+      performersList[performersList.findIndex(performer => performer.id == socket.id)]['codeBase'] = codeBase;
+      // Emit to audience
+      audience.emit('codeChange', {id: socket.id, codeBase: codeBase});
     });
-    socket.on('songStateRequest', id => {
-      conductors.emit('songStateRequest', socket.id);
+    socket.on('songStateRequest', data => {
+      conductors.emit('songStateRequest', data);
     });
     // On disconnection
     socket.on("disconnect", () => {
       // Send socket info to audience
       audience.emit('performerDisconnected', socket.id);
+      // Remove from array
+      performersList.splice(performersList.indexOf(socket.id), 1);
       // Log disconnection at socket id
       console.log(`⚠️ Performer DISCONNECTED at ${socket.id}`);
     });

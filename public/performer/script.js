@@ -3,6 +3,7 @@
 //---------------------------------------------
 // Tracks if code should be sent to server
 let socketEnabled = false;
+let mute = false;
 let socketID;
 
 //---------------------------------------------
@@ -36,7 +37,7 @@ socket.on('songPaused', song => {
 });
 
 socket.on('songState', data => {
-    if(socketID == data.id){
+    if(socketID == data.performerId){
         console.log("🎸 Received song state!");
         console.log(`${data.name}, ${data.time}, ${data.isPlaying}`);
         renderOutput(data.name, data.time, data.isPlaying);
@@ -62,7 +63,7 @@ $(document).ready(() => {
 
     // Text editing and script re-rendering
     $('[contenteditable]').on('focus', () => {
-    }).on('blur keyup paste', () => {
+    }).on('keyup paste', () => {
         // Save codeblock element
         let codeBlock = document.getElementById("codeBlock")
         // Get current cursor position (Syntax highlighting resets cursor position)
@@ -73,7 +74,7 @@ $(document).ready(() => {
         setCurrentCursorPosition(codeBlock, cursorPos + 12);
         // Call function to render input to output
         // Returns code or null if error in code
-        socket.emit('songStateRequest', socket.id);
+        socket.emit('songStateRequest', {performerId: socket.id});
         let codeBase = renderOutput();
         // Send code to server if allowed
         if(socketEnabled && codeBase){
@@ -182,6 +183,10 @@ function renderOutput(songName, songTime, songPlaying){
         
         function preload(){
             song = loadSound('../music/musicForProgramming-1.mp3')
+        }
+
+        function changeAudioLevel(level){
+            masterVolume(level);
         }
         
         function setup() {

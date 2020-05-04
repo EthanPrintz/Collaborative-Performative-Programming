@@ -12,7 +12,7 @@ iframe{
     border-width: 0;
 }
 
-#musicStopped, #preshow{
+#musicStopped, #preshow, #landing{
     position: absolute;
     width: 100vw;
     height: 100vh;
@@ -27,6 +27,39 @@ iframe{
     font-weight: bold;
     font-family: sans-serif;
 }
+
+#landing{
+    z-index: 3;
+    display: block;
+    text-align: center;
+    padding-top: 20vh;
+}
+    #welcome{
+        color: lightgrey;
+        font-size: 2vmax;
+        padding: 1vmin;
+    }
+    #title{
+        padding: 0 10vw;
+    }
+    #by{
+        color: lightgrey;
+        font-size: 2vmax;
+        padding: 1vmin;
+    }
+    #enter{
+        border: 2px solid lightgrey;
+        border-radius: 2vmin;
+        color: lightgrey;
+        font-size: 2vmax;
+        margin: 2vmin;
+        padding: 2vmin;
+        width: 20vw;
+        margin-top: 10vmin;
+        margin-left: calc(50vw - 10vw);
+        cursor: pointer;
+    }
+
 #preshow{
     z-index: 2;
 }
