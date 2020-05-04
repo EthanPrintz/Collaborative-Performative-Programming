@@ -114,7 +114,7 @@ const conductors = io.of('/conductor');
     });
     // Song state reply
     socket.on('songStateReply', data => {
-      console.log("Received song state reply for id ", data["id"]);
+      // console.log("Received song state reply for id ", data["id"]);
       audience.emit('songState', data);
       performers.emit('songState', data);
     });

@@ -1,6 +1,7 @@
 body{
     background-color: black;
     color: white;
+    font-family: sans-serif;
 }
 .output{
     float: left;
@@ -11,6 +12,37 @@ body{
 iframe{
     border-width: 0;
 }
+
+#performersCode{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+}
+    .codeTile{
+        float: left;
+        width: 50vw;
+        height: 50vh;
+        position:relative;
+    }
+        .idTag{
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: rgba(0,0,0,0.3);
+            padding: 1vmin;
+        }
+    .codeUpdate{
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 1vmin;
+        max-width: 45vw;
+        max-height: 45vh;
+        font-size: 2vmin;
+        font-family: monospace;
+        overflow: hidden;
+    }
 
 #musicStopped, #preshow, #landing{
     position: absolute;
@@ -26,10 +58,11 @@ iframe{
     font-size: 4vmax;
     font-weight: bold;
     font-family: sans-serif;
+    z-index: 3;
 }
 
 #landing{
-    z-index: 3;
+    z-index: 4;
     display: block;
     text-align: center;
     padding-top: 20vh;
@@ -61,5 +94,5 @@ iframe{
     }
 
 #preshow{
-    z-index: 2;
+    z-index: 3;
 }
