@@ -46,28 +46,39 @@ function getLevel(){
 
 // DRAW LOOP
 function draw() {
-
+  // Set volume variable from function
   let vol = getLevel();
   
+  // Background color
   background(30);
   
+  // Loop to create multiple circles
 	for(var i=0;i<100;i++){
     
     //Draw Outer Ellipses
-    fill(30);
-    stroke(240);
-    ellipseRadius = (ellipseWidth%i)*4*vol;
-    ellipse((windowWidth / 2), (windowHeight / 2), ellipseRadius, ellipseRadius);
+      // Color interior
+      fill(30);
+      // Color stroke
+      stroke(240);
+      // Calculate circle radius
+      ellipseRadius = (ellipseWidth%i)*4*vol;
+      // Draw circle
+      ellipse((windowWidth / 2), (windowHeight / 2), ellipseRadius, ellipseRadius);
     
   	//Draw Inner Ellipses
-    stroke(255,0,0);
-    ellipseRadius = (ellipseWidth%i)*3*vol;
-    ellipse((windowWidth / 2), (windowHeight / 2), ellipseRadius, ellipseRadius);
+      // Color stroke
+      stroke(255,0,0);
+      // Calculate circle radius
+      ellipseRadius = (ellipseWidth%i)*3*vol;
+      // Draw circle
+      ellipse((windowWidth / 2), (windowHeight / 2), ellipseRadius, ellipseRadius);
   
   }
 
+  // Make circles larger over time
   ellipseWidth++;
-  
+
+  // Reset circle size when too large
   if(ellipseWidth>920){
     ellipseWidth=1;
   }
