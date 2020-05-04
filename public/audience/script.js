@@ -72,7 +72,8 @@ socket.on('performerDisconnected', id => {
 socket.on('songPlayed', song => {
     console.log(`Song ${song.name} PLAYED at time ${song.time}`);
     performers.forEach(performer => {
-        document.getElementById(performer['id'].split("#")[1]).srcdoc = returnOutput(song.name, true, song.time, performer.codeBase);
+        // document.getElementById(performer['id'].split("#")[1]).srcdoc = returnOutput(song.name, true, song.time, performer.codeBase);
+        document.getElementById(performer['id'].split("#")[1]).contentWindow.playSong();
     });
     $("#preshow").hide();
     $("#musicStopped").hide();
@@ -82,7 +83,8 @@ socket.on('songPlayed', song => {
 socket.on('songPaused', song => {
     console.log(`Song ${song.name} PAUSED at time ${song.time}`);
     performers.forEach(performer => {
-        document.getElementById(performer['id'].split("#")[1]).srcdoc = returnOutput(song.name, false, song.time, performer.codeBase);
+        // document.getElementById(performer['id'].split("#")[1]).srcdoc = returnOutput(song.name, false, song.time, performer.codeBase);
+        document.getElementById(performer['id'].split("#")[1]).contentWindow.pauseSong();
     });
     $("#musicStopped").show();
 });
@@ -105,6 +107,7 @@ socket.on('songState', data => {
 });
 
 function returnOutput(songName, songPlaying, songTime, codeBase){
+    console.log("New codebase: ", codeBase.replace(/} else {(.*)/, ""));
     return `<style>body{margin: 0; overflow: hidden;}</style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/addons/p5.sound.min.js"></script>
@@ -118,6 +121,14 @@ function returnOutput(songName, songPlaying, songTime, codeBase){
         function preload(){
             song = loadSound('../music/musicForProgramming-1.mp3')
         }
+
+        function playSong(){
+            song.play();
+        }
+
+        function pauseSong(){
+            song.stop();
+        }
         
         function setup() {
             // Create P5 Canvas
@@ -129,13 +140,10 @@ function returnOutput(songName, songPlaying, songTime, codeBase){
             if(${songPlaying ?? false}){
                 song.play();
                 song.jump(${songTime ?? 0});
-            } else{
-                mic = new p5.AudioIn();
-                mic.start();
-            }
+            } 
         //============================================
         // Do not change anything above this line
         //============================================
-        ${codeBase}
+        ${codeBase.replace(/} else {(.*)/, "").replace("songPlaying", "true")}
     </script>`
 }

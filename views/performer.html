@@ -39,10 +39,11 @@
 function getLevel(){
     if(songPlaying){
         return amp.getLevel()*10;
-    } else {
+    } else { // Gets mic level
         return mic.getLevel()*100;
     }
 }
+// END GETS VOLUME
 
 // DRAW LOOP
 function draw() {
